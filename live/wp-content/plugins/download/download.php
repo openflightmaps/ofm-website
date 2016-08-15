@@ -35,8 +35,8 @@ class download extends WP_Widget
   {
   ?>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="http://www.openflightmaps.org/live/js/timeago.js"></script>
-  <script src="http://www.openflightmaps.org/live/wp-content/plugins/download/download.js"></script>
+  <script src="../js/timeago.js"></script>
+  <script src="../wp-content/plugins/download/download.js"></script>
   <script>
     // Stops the reloading for the download plugin while the curser is in an input field.
     $(document).ready(function(){

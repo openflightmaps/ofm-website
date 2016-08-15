@@ -28,6 +28,7 @@ var downloadContents = [];      // Saves the whole html-code within the <div> wi
 var searchForProducts = "";
 var noMatches = "";
 var moreMatchesAvail = "";
+var howThisWorks = "";
 
 function createSite() {
     // This function creates the html-code for the download plugin.
@@ -44,10 +45,13 @@ function createSite() {
                     searchForProducts = $(this).attr("searchForProducts_local");
                     noMatches = $(this).attr("noMatches_local");
                     moreMatchesAvail = $(this).attr("moreMatchesAvail_local");
+                    howThisWorks= $(this).attr("howThisWorks_local"); 
                 } else {
                     searchForProducts = $(this).attr("searchForProducts_english");
                     noMatches = $(this).attr("noMatches_english");
                     moreMatchesAvail = $(this).attr("moreMatchesAvail_english");
+                    howThisWorks= $(this).attr("howThisWorks_english"); 
+
                 }
 
                 if (onMaintenance == "false") {     // Maintenance mode
@@ -70,13 +74,19 @@ function createSite() {
                         if (languageLocal) {                                 
                             var header = $(this).attr("header_local");
                             var content = $(this).attr("body_local");
+                            
                         } else {
                             var header = $(this).attr("header_english");
                             var content = $(this).attr("body_english");
                         }
-
+						
+							var howThisWorksURL = $(this).attr("howThisWorksURL");
+							
+							// ignore if not set
+							if (howThisWorksURL == undefined){howThisWorks=""};
+						 
                         // Plugin header and content:   // margin-top:35px seperates the section (distance of 50 px) for better readibility
-                        htmlString += "<div class='row' style='margin-top:35px'><div class='col-lg-12'><h2 style='font-weight: normal'>" + header + "</h2><p class='lead'>" + content + "</p></div></div>";
+                        htmlString += "<div class='row' style='margin-top:35px'><div class='col-lg-12'><h2>" + header + "<small style='font-size:15px'> <a href='" + howThisWorksURL + "'>" + howThisWorks + "</a></small></h2><p class='lead'>" + content + "</p></div></div>";
                         htmlString += "<div class='row'><div class='col-lg-12'><div class='btn-group' role='group' aria-label='...'>";
 
                         var i = 0;  // Variable for different products in the sections.

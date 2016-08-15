@@ -215,6 +215,7 @@ h4,
 h5,
 h6 {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+
 }
 
 h1{
@@ -225,7 +226,7 @@ h1{
 }
 
 h2 {
-font-weight:normal !important;
+font-weight:bold !important;
 }
 
 h3 {
