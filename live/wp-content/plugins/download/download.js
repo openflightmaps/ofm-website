@@ -188,7 +188,7 @@ function createDownloadBox(j, i, scrollTo) {
         }
 
 
-        var htmlString = "<div style='border-style:solid; border-color:white; border-width: 1px; background-color:white;'><div class='row' style='padding:5px'><div class='col-lg-12'><h3>" + title + "</h3><p>" + description + "</p></div></div><div class='row' style='padding:5px'><div class='col-lg-12' ><div class='input-group pull-right' style='width:100%;max-width:250px'><form onkeyup='createDownloadsList(" + j + "," + i + ");return false;' onsubmit='return false'><small class='control-label'>" + searchForProducts + "</small><input id='searchText" + j + i + "' style='border:1px black solid' autocomplete='off' type='text' class='form-control' placeholder='Search for...' /></form></div></div></div><div class='row' style='margin-left:5px; margin-right:-9px'><div id=downloadList" + j +"></div></div></div></div></div>";
+        var htmlString = "<div style='border-style:solid; border-color:white; border-width: 1px; background-color:white;'><div class='row' style='padding:5px'><div class='col-lg-12'><h3>" + title + "</h3><p>" + description + "</p></div></div><div class='row' style='padding:5px'><div class='col-lg-12' ><div class='input-group pull-right' style='width:100%;max-width:250px'><form onkeyup='createDownloadsList(" + j + "," + i + ");return false;' onsubmit='return false'><input id='searchText" + j + i + "' style='border:1px black solid' autocomplete='off' type='text' class='form-control' placeholder='" + searchForProducts + "' /></form></div></div></div><div class='row' style='margin-left:5px; margin-right:-9px'><div id=downloadList" + j +"></div></div></div></div></div>";
         document.getElementById("downloadContent" + j).innerHTML = htmlString;
         createDownloadsList(j, i);
 
@@ -300,17 +300,48 @@ function createDownloadsList(jj, i) {
 
             var windowWidth = $(window).width();
 
-            if (windowWidth <= 700) {       // Default mobil
-                checkbox[0] = filter1[1];
-                checkbox[1] = filter2[1];
-                keineAhnung[3] = 1;
+            if (filter2[0] == undefined && filter2[1] == undefined) { // only one filter
+                if (windowWidth <= 700) {       // Default mobil
+                    checkbox[0] = filter1[1];
+                    checkbox[2] = filter1[0];
+                    keineAhnung[1] = 0;
+                    keineAhnung[3] = 1;
+                } else {
+                    checkbox[0] = filter1[0];
+                    checkbox[2] = filter1[1];
+                    keineAhnung[1] = 1;
+                    keineAhnung[3] = 0;
+                };
+            } else { // two filters
+                if (windowWidth <= 700) {       // Default mobil
+                    checkbox[0] = filter1[1];
+                    checkbox[1] = filter2[1];
+                    keineAhnung[3] = 1;
 
-                for (kk = 0; kk < 4; kk++) {
-                    if (kk !== 1) {
-                        if (filter1[1] !== filter1[kk] & filter2[1] == filter2[kk]) {
+                    for (kk = 0; kk < 4; kk++) {
+                        if (kk !== 1) {
+                            if (filter1[1] !== filter1[kk] & filter2[1] == filter2[kk]) {
+                                checkbox[2] = filter1[kk];
+                                keineAhnung[0] = kk;
+                            } else if (filter2[1] !== filter2[kk] & filter1[1] == filter1[kk]) {
+                                checkbox[3] = filter2[kk];
+                                keineAhnung[1] = kk;
+                            } else {
+                                keineAhnung[2] = kk;
+                            }
+                        }
+                    }
+
+                } else {                        // Default
+                    checkbox[0] = filter1[0];
+                    checkbox[1] = filter2[0];
+                    keineAhnung[3] = 0;
+
+                    for (kk = 1; kk < 4; kk++) {
+                        if (filter1[0] !== filter1[kk] & filter2[0] == filter2[kk]) {
                             checkbox[2] = filter1[kk];
                             keineAhnung[0] = kk;
-                        } else if (filter2[1] !== filter2[kk] & filter1[1] == filter1[kk]) {
+                        } else if (filter2[0] !== filter2[kk] & filter1[0] == filter1[kk]) {
                             checkbox[3] = filter2[kk];
                             keineAhnung[1] = kk;
                         } else {
@@ -318,32 +349,17 @@ function createDownloadsList(jj, i) {
                         }
                     }
                 }
-
-            } else {                        // Default
-                checkbox[0] = filter1[0];
-                checkbox[1] = filter2[0];
-                keineAhnung[3] = 0;
-
-                for (kk = 1; kk < 4; kk++) {
-                    if (filter1[0] !== filter1[kk] & filter2[0] == filter2[kk]) {
-                        checkbox[2] = filter1[kk];
-                        keineAhnung[0] = kk;
-                    } else if (filter2[0] !== filter2[kk] & filter1[0] == filter1[kk]) {
-                        checkbox[3] = filter2[kk];
-                        keineAhnung[1] = kk;
-                    } else {
-                        keineAhnung[2] = kk;
-                    }
-                }
             }
 
 
-            if (k < 12) {
+            if (k < 12) { // Shown boxes
 
-                if (noVariants == true) {
+                if (noVariants == true) { // no filters
                     htmlString += "<div class='col-md-4 col-sm-6 col-lg-3 list-groupPlugin' style='cursor:default;min-height:90px;padding-bottom:5px;padding-top:5px;'><div><div><table style='width:100%; background:#f1f1f1;' ><tbody><tr><td style='width:50%' colspan='2'><div style='margin-left:6px'><span style='margin-top:0px;padding:1px'>" + name + "</span><small style='margin:3px;font-size:14px'>" + detailsRespHtml + "</small></div><hr style='margin:0;padding:0;border-color:white'></td></tr><tr><td colspan='2'><small style='padding:2px;font-size:11px;margin-left:4px'>" + timeLeftStr + "</small></td></tr><tr><td style='text-align:left' colspan='2'><tr><td style='text-align:right;' colspan='2'><button id='url" + jj + i + k + "'  onClick='window.open(\"" + urlUnique + "\")' class='btn btn-info btn-sm ofm-blue' style='border-radius:0px;margin-bottom:3px;margin-right:3px;max-width:150px;' type='button' href='#'>Download</button></td></tr></tbody></table></div></div></div>";
-                } else {
+                } else if (filter2[0] != undefined && filter2[1] != undefined) { // two filters
                     htmlString += "<div class='col-md-4 col-sm-6 col-lg-3 list-groupPlugin' style='cursor:default;min-height:90px;padding-bottom:5px;padding-top:5px;'><div><div><table style='width:100%; background:#f1f1f1;' ><tbody><tr><td style='width:50%' colspan='2'><div style='margin-left:6px'><span style='margin-top:0px;padding:1px'>" + name + "</span><small style='margin:3px;font-size:14px'>" + detailsRespHtml + "</small></div><hr style='margin:0;padding:0;border-color:white'></td></tr><tr><td colspan='2'><small style='padding:2px;font-size:11px;margin-left:4px'>" + timeLeftStr + "</small></td></tr><tr><td style='text-align:left' colspan='2'><button id='settings_cmd" + jj + i + k + "' class='btn btn-sm' style='border:0px;border-radius:0px; background:#f1f1f1;width:auto; text-align:left;margin-bottom:0px;margin-left:3px;' type='button' onClick=' $(\"#settings_cmd" + jj + i + k + "\").css(\"background-color\",\"white\"); document.getElementById(\"checkboxRow1" + jj + i + k + "\").style.display = \"block\"; document.getElementById(\"checkboxRow2" + jj + i + k + "\").style.display = \"block\"';>" + settings + "</button></td></tr><tr id='checkboxRow1" + jj + i + k + "' style='display:none;background-color:white;border-left: 3px #f1f1f1 solid;border-right: 3px #f1f1f1 solid'><td width='50%'><div class='radio' style='margin-left:6px'><label><input type='radio' name='optradio1" + jj + i + k + "' id='optradio0" + jj + i + k + "' checked><small style='font-size:11px'>" + checkbox[0] + "</small></input></label></div></td><td><div class='radio' style='margin-left:6px'><label><input type='radio' name='optradio1" + jj + i + k + "' id='optradio2" + jj + i + k + "'><small style='font-size:11px'>" + checkbox[2] + "</small></input></label></div></td></tr><tr id='checkboxRow2" + jj + i + k + "' style='display:none;background-color:white;border-bottom: 3px #f1f1f1 solid;border-left: 3px #f1f1f1 solid;border-right: 3px #f1f1f1 solid;margin-bottom:0px'><td width='50%'><div class='radio' style='margin-left:6px'><label><input type='radio' name='optradio2" + jj + i + k + "' id='optradio1" + jj + i + k + "' checked><small style='font-size:11px'>" + checkbox[1] + "</small></input></label></div></td><td><div class='radio' style='margin-left:6px'><label><input type='radio' name='optradio2" + jj + i + k + "' id='optradio3" + jj + i + k + "'><small style='font-size:11px'>" + checkbox[3] + "</small></input></label></div></td></tr><tr><td style='text-align:right;' colspan='2'><button id='url" + jj + i + k + "' onClick='if (document.getElementById(\"optradio0" + jj + i + k + "\").checked) { if (document.getElementById(\"optradio1" + jj + i + k + "\").checked) { window.open(\"" + url[keineAhnung[3]] + "\"); } else { window.open(\"" + url[keineAhnung[1]] + "\"); } } else { if (document.getElementById(\"optradio1" + jj + i + k + "\").checked) { window.open(\"" + url[keineAhnung[0]] + "\"); } else { window.open(\"" + url[keineAhnung[2]] + "\"); } }' class='btn btn-info btn-sm ofm-blue' style='border-radius:0px;margin-bottom:3px;margin-right:3px;max-width:150px;' type='button' href='#'>Download</button></td></tr></tbody></table></div></div></div>";
+                } else { // one filter
+                    htmlString += "<div class='col-md-4 col-sm-6 col-lg-3 list-groupPlugin' style='cursor:default;min-height:90px;padding-bottom:5px;padding-top:5px;'><div><div><table style='width:100%; background:#f1f1f1;'><tbody><tr><td style='width:50%' colspan='2'><div style='margin-left:6px'><span style='margin-top:0px;padding:1px'>" + name + "</span><small style='margin:3px;font-size:14px'>" + detailsRespHtml + "</small></div><hr style='margin:0;padding:0;border-color:white'></td></tr><tr><td colspan='2'><small style='padding:2px;font-size:11px;margin-left:4px'>" + timeLeftStr + "</small></td></tr><tr><td style='text-align:left' colspan='2'><button id='settings_cmd" + jj + i + k + "' class='btn btn-sm' style='border:0px;border-radius:0px; background:#f1f1f1;width:auto; text-align:left;margin-bottom:0px;margin-left:3px;' type='button' onClick='$(\"#settings_cmd" + jj + i + k + "\" ).css(\"background-color\",\"white\"); document.getElementById(\"checkboxRow1" + jj + i + k + "\" ).style.display=\"block\";'> " + settings + "</button></td></tr><tr id='checkboxRow1" + jj + i + k + "' style='display:none;background-color:white;border-left: 3px #f1f1f1 solid;border-right: 3px #f1f1f1 solid'><td width='50%'><div class='radio' style='margin-left:6px'><label><input type='radio' name='optradio1" + jj + i + k + "' id='optradio0" + jj + i + k + "' checked><small style='font-size:11px'>" + checkbox[0] + "</small></input></label></div></td><td><div class='radio' style='margin-left:6px'><label><input type='radio' name='optradio1" + jj + i + k + "' id='optradio2" + jj + i + k + "'><small style='font-size:11px'>" + checkbox[2] + "</small></input></label></div></td></tr><tr><td style='text-align:right;' colspan='2'><button id='url" + jj + i + k + "' onClick='if (document.getElementById(\"optradio0" + jj + i + k + "\").checked) { window.open(\"" + url[keineAhnung[3]] + "\"); } else { window.open(\"" + url[keineAhnung[1]] + "\"); }' class='btn btn-info btn-sm ofm-blue' style='border-radius:0px;margin-bottom:3px;margin-right:3px;max-width:150px;' type='button' href='#'>Download</button></td></tr></tbody></table></div></div></div>";
                 }
             } else if (k == 12) {
                 htmlString += "<div class='col-md-12 col-sm-12 col-lg-12 list-groupPlugin'><a class='list-group-item' style='border-style:none'><div><h4>" + moreMatchesAvail + "</h4></div></a></div>";
