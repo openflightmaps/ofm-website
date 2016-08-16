@@ -83,7 +83,7 @@ function createSite() {
 							var howThisWorksURL = $(this).attr("howThisWorksURL");
 							
 							// ignore if not set
-							if (howThisWorksURL == undefined){howThisWorks=""};
+							if ((howThisWorksURL == undefined)||(howThisWorksURL == "")){howThisWorks=""};
 						 
                         // Plugin header and content:   // margin-top:35px seperates the section (distance of 50 px) for better readibility
                         htmlString += "<div class='row' style='margin-top:35px'><div class='col-lg-12'><h2>" + header + "<small style='font-size:15px'> <a href='" + howThisWorksURL + "'>" + howThisWorks + "</a></small></h2><p class='lead'>" + content + "</p></div></div>";
