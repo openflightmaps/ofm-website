@@ -69,7 +69,7 @@ global $eo_options,$wpdb,$th_xs_slug;
 	
 	// Set global variables and functions for page.
 
-		var languageLocal = (window.location.hash =="#lang=local");	// Global variable for the chosen language. 
+		var languageLocal = !(window.location.hash =="#lang=en");	// Global variable for the chosen language. 
 		var onMaintenance = "false";	// Global variable for maintenance mode of the page.
 		var xmlDoc;					// Global varibale for the .xml file.
 		var toggleUpdating = true;
