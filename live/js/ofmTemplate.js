@@ -1,4 +1,4 @@
-﻿var urlCommercial = ['not set'];            // If the .xml hasn't been loaded yet.
+var urlCommercial = ['not set'];            // If the .xml hasn't been loaded yet.
 var urlPictures = ['not set'];              // If the .xml hasn't been loaded yet.
 var alphaPictures = [0];
 var commercialIteration = 0;                // Counter to avoid skiping commeracial after reloading .xml.
@@ -305,21 +305,21 @@ function requestPublications() {
     // This funct ion loads the .xml file and savonMaintenancees it as a global variabl named xmlDoc.xml.
     // This function is called in the header-OFM.php file.
 
-    if (ignoreUpdateTimer == true) { return;}
-var currentdate = new Date();
+    if (ignoreUpdateTimer == true) { return; }
+    var currentdate = new Date();
 
-var today = new Date();
+    var today = new Date();
 
-var lastUpdateLabel = today.toISOString().substring(0, 16);
-	$('#lastUpdate').text(lastUpdateLabel );
+    var lastUpdateLabel = today.toISOString().substring(0, 16);
+    $('#lastUpdate').text(lastUpdateLabel);
 
-	xmlUrl += '?time=' + currentdate.getMinutes() + currentdate.getSeconds();
+    xmlUrl += '?time=' + currentdate.getMinutes() + currentdate.getSeconds();
     $.ajax(
     {
-        type: "POST",
-        url:  'http://openflightmaps.org/testumgebung/getPublicationsXml.php',
-         data: "url=" + xmlUrl,
-        dataType: "text",
+        type: "GET",
+        url: xmlUrl,
+        crossDomain: true,
+        dataType: "xml",
         cache: false,
         success: function (result) {
             xmlDoc = result;
@@ -330,7 +330,7 @@ var lastUpdateLabel = today.toISOString().substring(0, 16);
             $("#footer").css('display', 'block');
             $("#footer2").css('display', 'block');
             backgroundPicture();
-       
+
         },
         error: function (request, error) {
             console.log(arguments);
@@ -339,6 +339,7 @@ var lastUpdateLabel = today.toISOString().substring(0, 16);
         async: true
     });
 }
+
 
 function createCommercialString() {
     // This function creats the string for the commercials in the footer.
