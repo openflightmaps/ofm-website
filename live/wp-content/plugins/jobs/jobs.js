@@ -1,4 +1,4 @@
-﻿var timeStart = [];
+var timeStart = [];
 var timeEnd = [];
 
 // blink feature
@@ -102,6 +102,8 @@ function createJobsList() {
                         var dateNow = new Date();
                         var timeNow = dateNow.getTime();
                         progress[i] = (timeNow - timeStart[i]) * 100 / (timeEnd[i] - timeStart[i]);
+
+                        if (progress[i] > 100) { progress[i] = 100;}
                         var progressBar = progress[i];
 
 						var  disabled = "style='display:none'";
